@@ -1,34 +1,31 @@
-// global variables
-var apiKey = "7bf4714838197678a40f649419bcc8de";
+// API variables
+var apiKey = "2181289bd7084fd79c31f4f3743f4732";
 var savedSearches = [];
 
-// make list of previously searched cities
+// searched cities
 var searchHistoryList = function(cityName) {
     $('.past-search:contains("' + cityName + '")').remove();
 
-    // create entry with city name
+    // city name
     var searchHistoryEntry = $("<p>");
     searchHistoryEntry.addClass("past-search");
     searchHistoryEntry.text(cityName);
 
-    // create container for entry
+    
     var searchEntryContainer = $("<div>");
     searchEntryContainer.addClass("past-search-container");
-
-    // append entry to container
+    
     searchEntryContainer.append(searchHistoryEntry);
-
-    // append entry container to search history container
+    
     var searchHistoryContainerEl = $("#search-history-container");
     searchHistoryContainerEl.append(searchEntryContainer);
 
     if (savedSearches.length > 0){
-        // update savedSearches array with previously saved searches
+        // update savedSearches 
         var previousSavedSearches = localStorage.getItem("savedSearches");
         savedSearches = JSON.parse(previousSavedSearches);
     }
 
-    // add city name to array of saved searches
     savedSearches.push(cityName);
     localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
 
@@ -37,20 +34,17 @@ var searchHistoryList = function(cityName) {
 
 };
 
-// load saved search history entries into search history container
+// saved searches
 var loadSearchHistory = function() {
-    // get saved search history
+    
     var savedSearchHistory = localStorage.getItem("savedSearches");
 
-    // return false if there is no previous saved searches
     if (!savedSearchHistory) {
         return false;
     }
-
-    // turn saved search history string into array
+    
     savedSearchHistory = JSON.parse(savedSearchHistory);
 
-    // go through savedSearchHistory array and make entry for each item in the list
     for (var i = 0; i < savedSearchHistory.length; i++) {
         searchHistoryList(savedSearchHistory[i]);
     }
@@ -68,7 +62,7 @@ var currentWeatherSection = function(cityName) {
             var cityLon = response.coord.lon;
             var cityLat = response.coord.lat;
 
-            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=${apikey}`)
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=${apiKey}`)
                 // get response from one call api and turn it into objects
                 .then(function(response) {
                     return response.json();
@@ -77,16 +71,16 @@ var currentWeatherSection = function(cityName) {
                 .then(function(response){
                     searchHistoryList(cityName);
 
-                    // add current weather container with border to page
-                    var currentWeatherContainer = $("#current-weather-container");
-                    currentWeatherContainer.addClass("current-weather-container");
+                    // current weather
+                    var currentWeatherContainer = $("#current-weather");
+                    currentWeatherContainer.addClass("current-weather");
 
-                    // add city name, date, and weather icon to current weather section title
+                    
                     var currentTitle = $("#current-title");
                     var currentDay = moment().format("M/D/YYYY");
                     currentTitle.text(`${cityName} (${currentDay})`);
-                    var currentIcon = $("#current-weather-icon");
-                    currentIcon.addClass("current-weather-icon");
+                    var currentIcon = $("#current-weather-picture");
+                    currentIcon.addClass("current-weather-picture");
                     var currentIconCode = response.current.weather[0].icon;
                     currentIcon.attr("src", `https://openweathermap.org/img/wn/${currentIconCode}@2x.png`);
 
@@ -123,13 +117,13 @@ var currentWeatherSection = function(cityName) {
             $("#search-input").val("");
 
             // alert user that there was an error
-            alert("We could not find the city you searched for. Try searching for a valid city.");
+            alert("Please search for a valid city.");
         });
 };
 
 var fiveDayForecastSection = function(cityName) {
-    // get and use data from open weather current weather api end point
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
+    
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`)
         // get response and turn it into objects
         .then(function(response) {
             return response.json();
@@ -139,7 +133,7 @@ var fiveDayForecastSection = function(cityName) {
             var cityLon = response.coord.lon;
             var cityLat = response.coord.lat;
 
-            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid=${apikey}`)
+            fetch(`http://api.openweathermap.org/data/2.5/onecall?lat=${cityLat}&lon=${cityLon}&exclude=minutely,hourly,alerts&units=imperial&appid=${apiKey}`)
                 // get response from one call api and turn it into objects
                 .then(function(response) {
                     return response.json();
