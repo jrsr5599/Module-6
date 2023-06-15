@@ -107,11 +107,6 @@ var currentWeatherSection = function (cityName) {
             "Wind Speed: " + data.current.wind_speed + " MPH"
           );
 
-          // current uv
-          var currentUvIndex = $("#current-uv-index");
-          currentUvIndex.text("UV Index: ");
-          var currentNumber = $("#current-number");
-          currentNumber.text(data.current.uvi);
 
           // 5 day forcast
           var futureForecastTitle = $("#future-forecast-title");
