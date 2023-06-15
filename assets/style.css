@@ -36,7 +36,7 @@
 .past-search {
     background-color: white;
     border-width: thin;
-    border-color: lightgrey;
+    border-color: rgb(211, 211, 21);
     border-style: solid;
     border-radius: 3px;
     margin: 0;
@@ -45,11 +45,11 @@
     height: 45px;
     line-height: 45px;
     padding: 0 20px;
-    color: grey;
+    color: blue
 }
 
 .current-weather-container {
-    border-color: lightgrey;
+    border-color: rgb(211, 211, 211);
     border-width: thin 0 thin thin;
     border-style: solid;
     border-radius: 3px;
